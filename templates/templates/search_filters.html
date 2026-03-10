@@ -1,0 +1,43 @@
+<div class="card shadow-sm p-3 mb-4">
+  <h5 class="mb-3">Search and Filter Projects</h5>
+  <form id="filterForm" class="row g-3">
+    <div class="col-md-3">
+      <label class="form-label">Search</label>
+      <input type="text" id="searchInput" class="form-control" placeholder="Search by title...">
+    </div>
+
+    <div class="col-md-3">
+      <label class="form-label">Campus</label>
+      <select id="campusFilter" class="form-select">
+        <option value="">All Campuses</option>
+        <option value="ML Sultan">ML Sultan</option>
+        <option value="Steve Biko">Steve Biko</option>
+        <option value="Ritson">Ritson</option>
+      </select>
+    </div>
+
+    <div class="col-md-3">
+      <label class="form-label">Category</label>
+      <select id="categoryFilter" class="form-select">
+        <option value="">All Categories</option>
+        <option value="Energy">Energy</option>
+        <option value="Recycling">Recycling</option>
+      </select>
+    </div>
+
+    <div class="col-md-3">
+      <label class="form-label">Status</label>
+      <select id="statusFilter" class="form-select">
+        <option value="">All Statuses</option>
+        <option value="Pending">Pending</option>
+        <option value="Approved">Approved</option>
+        <option value="Completed">Completed</option>
+      </select>
+    </div>
+
+    <div class="col-12 d-flex gap-2">
+      <button type="button" class="btn btn-success" onclick="filterProjects()">Apply Filters</button>
+      <button type="button" class="btn btn-outline-secondary" onclick="resetFilters()">Reset</button>
+    </div>
+  </form>
+</div>
