@@ -1,1 +1,16 @@
+{% extends "base.html" %}
 
+{% block title %}Project Detail{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm p-4">
+  <h2>{{ project.title }}</h2>
+  <p><strong>Status:</strong> {{ project.status }}</p>
+  <p><strong>Campus:</strong> {{ project.campus.name }}</p>
+  <p><strong>Category:</strong> {{ project.category.name }}</p>
+  <p><strong>Submitted by:</strong> {{ project.user.full_name }}</p>
+  <hr>
+  <p><strong>Short Description:</strong> {{ project.short_description }}</p>
+  <p><strong>Detailed Description:</strong> {{ project.detailed_description }}</p>
+</div>
+{% endblock %}
