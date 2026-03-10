@@ -42,9 +42,6 @@ def home():
     return redirect(url_for("login"))
 
 
-# --------------------
-# AUTH
-# --------------------
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
     if current_user.is_authenticated:
@@ -112,9 +109,6 @@ def logout():
     return redirect(url_for("login"))
 
 
-# --------------------
-# MAIN PAGES
-# --------------------
 @app.route("/dashboard")
 @login_required
 def dashboard():
@@ -124,7 +118,7 @@ def dashboard():
     return render_template("dashboard.html", projects=projects, campuses=campuses, categories=categories)
 
 
-# Students ONLY can submit
+
 @app.route("/submit-project", methods=["GET", "POST"])
 @login_required
 @roles_required("student")
@@ -164,9 +158,6 @@ def project_detail(project_id):
     return render_template("project_detail.html", project=project)
 
 
-# --------------------
-# STAFF/ADMIN APPROVAL ONLY
-# --------------------
 @app.route("/admin/pending")
 @login_required
 @roles_required("staff", "admin")
@@ -216,7 +207,7 @@ def admin_page():
     )
 
 
-# Setup route to create sample users + campuses + categories
+
 @app.route("/setup")
 def setup():
     db.create_all()
@@ -261,4 +252,5 @@ def forbidden(_):
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
+
     app.run(debug=True)
