@@ -1,1 +1,34 @@
+{% extends "base.html" %}
 
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Approved Projects</h1>
+
+{% include 'search_filters.html' %}
+
+<div class="row" id="projectsContainer">
+  {% for project in projects %}
+  <div class="col-md-4 mb-4 project-card"
+       data-title="{{ project.title }}"
+       data-campus="{{ project.campus.name }}"
+       data-category="{{ project.category.name }}"
+       data-status="{{ project.status }}">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">{{ project.title }}</h5>
+        <p class="card-text">{{ project.short_description }}</p>
+        <p class="text-muted small">
+          Campus: {{ project.campus.name }}<br>
+          Category: {{ project.category.name }}<br>
+          Status: {{ project.status }}
+        </p>
+        <a href="{{ url_for('project_detail', project_id=project.id) }}" class="btn btn-primary">View Details</a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% endblock %}
