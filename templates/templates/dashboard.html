@@ -1,34 +1,145 @@
 {% extends "base.html" %}
-
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-<h1 class="mb-4">Approved Projects</h1>
+<h2 class="mb-4">Projects Dashboard</h2>
 
-{% include 'search_filters.html' %}
+<div class="card shadow-sm p-3 mb-4">
+  <h5 class="mb-3">Search and Filter Projects</h5>
 
-<div class="row" id="projectsContainer">
-  {% for project in projects %}
-  <div class="col-md-4 mb-4 project-card"
-       data-title="{{ project.title }}"
-       data-campus="{{ project.campus.name }}"
-       data-category="{{ project.category.name }}"
-       data-status="{{ project.status }}">
-    <div class="card h-100">
-      <div class="card-body">
-        <h5 class="card-title">{{ project.title }}</h5>
-        <p class="card-text">{{ project.short_description }}</p>
-        <p class="text-muted small">
-          Campus: {{ project.campus.name }}<br>
-          Category: {{ project.category.name }}<br>
-          Status: {{ project.status }}
-        </p>
-        <a href="{{ url_for('project_detail', project_id=project.id) }}" class="btn btn-primary">View Details</a>
-      </div>
+  <form id="filterForm" class="row g-3" onsubmit="return false;">
+    <div class="col-md-3">
+      <label class="form-label">Search</label>
+      <input type="text" id="searchInput" class="form-control" placeholder="Search by title..." oninput="filterProjects()">
     </div>
-  </div>
-  {% endfor %}
+
+    <div class="col-md-3">
+      <label class="form-label">Campus</label>
+      <select id="campusFilter" class="form-select" onchange="filterProjects()">
+        <option value="">All Campuses</option>
+        {% for c in campuses %}
+          <option value="{{ c.name }}">{{ c.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-md-3">
+      <label class="form-label">Category</label>
+      <select id="categoryFilter" class="form-select" onchange="filterProjects()">
+        <option value="">All Categories</option>
+        {% for cat in categories %}
+          <option value="{{ cat.name }}">{{ cat.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-md-3">
+      <label class="form-label">Status</label>
+      <select id="statusFilter" class="form-select" onchange="filterProjects()">
+        <option value="">All Statuses</option>
+        <option value="Pending">Pending</option>
+        <option value="Approved">Approved</option>
+        <option value="Completed">Completed</option>
+      </select>
+    </div>
+
+    <div class="col-12 d-flex gap-2">
+      <button type="button" class="btn btn-success" onclick="filterProjects()">Apply Filters</button>
+      <button type="button" class="btn btn-outline-secondary" onclick="resetFilters()">Reset</button>
+
+      {% if current_user.role == 'student' %}
+        <a href="{{ url_for('submit_project') }}" class="btn btn-outline-success ms-auto">Submit a Project</a>
+      {% endif %}
+    </div>
+  </form>
 </div>
 
-<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<div class="row" id="projectContainer">
+  {% if projects and projects|length > 0 %}
+    {% for project in projects %}
+      <div class="col-md-4 mb-4 project-card"
+           data-title="{{ project.title|e }}"
+           data-campus="{{ project.campus.name|e }}"
+           data-category="{{ project.category.name|e }}"
+           data-status="{{ project.status|e }}">
+        <div class="card shadow-sm h-100">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title">{{ project.title }}</h5>
+            <p class="text-muted mb-1"><strong>Campus:</strong> {{ project.campus.name }}</p>
+            <p class="text-muted mb-2"><strong>Category:</strong> {{ project.category.name }}</p>
+            <p class="card-text">{{ project.short_description }}</p>
+
+            <p class="mt-auto mb-3">
+              <strong>Status:</strong>
+              <span class="badge
+                {% if project.status == 'Approved' %}bg-success
+                {% elif project.status == 'Pending' %}bg-warning text-dark
+                {% elif project.status == 'Completed' %}bg-primary
+                {% else %}bg-secondary
+                {% endif %}">
+                {{ project.status }}
+              </span>
+            </p>
+
+            <a href="{{ url_for('project_detail', project_id=project.id) }}" class="btn btn-outline-success">
+              View Details
+            </a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="col-12">
+      <p id="noProjectsMessage">No approved projects yet.</p>
+    </div>
+  {% endif %}
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <p id="noResultsMessage" class="text-muted" style="display:none;">No projects match your filters.</p>
+  </div>
+</div>
+
+<script>
+  function filterProjects() {
+    const search = (document.getElementById('searchInput')?.value || '').toLowerCase().trim();
+    const campus = document.getElementById('campusFilter')?.value || '';
+    const category = document.getElementById('categoryFilter')?.value || '';
+    const status = document.getElementById('statusFilter')?.value || '';
+
+    const cards = document.querySelectorAll('.project-card');
+    let visibleCount = 0;
+
+    cards.forEach(card => {
+      const title = (card.dataset.title || '').toLowerCase();
+      const c = card.dataset.campus || '';
+      const cat = card.dataset.category || '';
+      const s = card.dataset.status || '';
+
+      const matches =
+        (!search || title.includes(search)) &&
+        (!campus || c === campus) &&
+        (!category || cat === category) &&
+        (!status || s === status);
+
+      card.style.display = matches ? '' : 'none';
+      if (matches) visibleCount++;
+    });
+
+    const noResults = document.getElementById('noResultsMessage');
+    if (noResults) noResults.style.display = (cards.length > 0 && visibleCount === 0) ? '' : 'none';
+  }
+
+  function resetFilters() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('campusFilter').value = '';
+    document.getElementById('categoryFilter').value = '';
+    document.getElementById('statusFilter').value = '';
+
+    document.querySelectorAll('.project-card').forEach(card => card.style.display = '');
+    const noResults = document.getElementById('noResultsMessage');
+    if (noResults) noResults.style.display = 'none';
+  }
+</script>
 {% endblock %}
