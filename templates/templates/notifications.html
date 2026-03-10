@@ -1,1 +1,36 @@
+{% extends "base.html" %}
 
+{% block title %}Notifications{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Notifications</h2>
+
+<div class="list-group">
+  <div class="list-group-item d-flex justify-content-between align-items-start">
+    <div>
+      <h6 class="mb-1">Project Approved</h6>
+      <p class="mb-1">Your project "Solar Energy Initiative" has been approved.</p>
+      <small class="text-muted">2 minutes ago</small>
+    </div>
+    <span class="badge bg-success">New</span>
+  </div>
+
+  <div class="list-group-item d-flex justify-content-between align-items-start">
+    <div>
+      <h6 class="mb-1">Project Update</h6>
+      <p class="mb-1">A new status update was added to "Campus Recycling Drive".</p>
+      <small class="text-muted">1 hour ago</small>
+    </div>
+    <span class="badge bg-primary">Info</span>
+  </div>
+
+  <div class="list-group-item d-flex justify-content-between align-items-start">
+    <div>
+      <h6 class="mb-1">Reminder</h6>
+      <p class="mb-1">Please complete your pending project submission review.</p>
+      <small class="text-muted">Yesterday</small>
+    </div>
+    <span class="badge bg-warning text-dark">Reminder</span>
+  </div>
+</div>
+{% endblock %}
