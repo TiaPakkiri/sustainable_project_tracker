@@ -1,1 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Submit Project{% endblock %}
+{% block content %}
+<h2 class="mb-4">Submit a Project</h2>
 
+<div class="card shadow-sm">
+  <div class="card-body">
+    <form method="POST">
+      <div class="mb-3">
+        <label class="form-label">Title</label>
+        <input name="title" class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Short Description</label>
+        <input name="short_description" class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Detailed Description</label>
+        <textarea name="detailed_description" class="form-control" rows="5" required></textarea>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Campus</label>
+        <select name="campus_id" class="form-select" required>
+          <option value="">Select a campus</option>
+          {% for c in campuses %}
+            <option value="{{ c.id }}">{{ c.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Category</label>
+        <select name="category_id" class="form-select" required>
+          <option value="">Select a category</option>
+          {% for cat in categories %}
+            <option value="{{ cat.id }}">{{ cat.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <button class="btn btn-success" type="submit">Submit</button>
+      <a class="btn btn-outline-secondary" href="{{ url_for('dashboard') }}">Cancel</a>
+    </form>
+  </div>
+</div>
+{% endblock %}
