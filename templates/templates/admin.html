@@ -1,1 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Admin{% endblock %}
 
+{% block content %}
+<h2 class="mb-4">Admin Dashboard</h2>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-3">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <div class="text-muted">Users</div>
+        <div class="fs-3 fw-semibold">{{ total_users }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <div class="text-muted">Projects</div>
+        <div class="fs-3 fw-semibold">{{ total_projects }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <div class="text-muted">Pending</div>
+        <div class="fs-3 fw-semibold">{{ pending_projects }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <div class="text-muted">Approved</div>
+        <div class="fs-3 fw-semibold">{{ approved_projects }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card shadow-sm">
+  <div class="card-body">
+    <h5 class="mb-3">Admin Actions</h5>
+
+    <div class="d-flex flex-wrap gap-2">
+      <a class="btn btn-success" href="{{ url_for('admin_pending') }}">Review Pending Projects</a>
+      <a class="btn btn-outline-secondary" href="{{ url_for('dashboard') }}">Go to Dashboard</a>
+    </div>
+
+    <hr>
+    <p class="text-muted mb-0">
+      Only users with the <strong>admin</strong> role can access this page.
+    </p>
+  </div>
+</div>
+{% endblock %}
