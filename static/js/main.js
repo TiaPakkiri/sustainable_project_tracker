@@ -24,11 +24,3 @@ function filterProjects() {
     }
   });
 }
-
-function resetFilters() {
-  document.getElementById("searchInput").value = "";
-  document.getElementById("campusFilter").value = "";
-  document.getElementById("categoryFilter").value = "";
-  document.getElementById("statusFilter").value = "";
-  filterProjects();
-}
